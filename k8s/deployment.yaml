@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: net-demo
+  namespace: aspnetcore
+  labels:
+    name: net-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: net-demo
+  template:
+    metadata:
+      labels:
+        name: net-demo
+    spec:
+      containers:
+      - name: net-demo
+        image: net-demo
+        ports:
+        - containerPort: 80
+        imagePullPolicy: Always
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: net-demo
+  namespace: aspnetcore
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30001
+  selector:
+    name: net-demo
